@@ -13,6 +13,7 @@ ydim=70
 zdim=70
 rcut= 5.6
 # rcut=6.5
+#f
 
 
 comp=np.array([0.33,0.33,0.34])
