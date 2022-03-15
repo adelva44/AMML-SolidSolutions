@@ -1,5 +1,5 @@
 #the version of this file is for Functions branch
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8  -*-
 """
 Created on Sun Mar 15 16:28:54 2020
 
@@ -184,6 +184,30 @@ def gen_cell_HCP(ao=None, xdim=None, ydim=None, zdim=None):
     
     return atoms, per
 
+def gen_cell_BCC(ao=None, xdim=None, ydim=None, zdim=None):
+    from ase.build import bulk
+    from ase.calculators.lammps import Prism, convert
+
+    ao = 3.5225
+    xdim = 20
+    ydim = 20
+    zdim = 20
+
+    a0 = bulk('Fe', 'bcc', cubic=True, a=ao)
+    a0 *= [20, 20, 20]
+
+    atoms = a0.get_positions()
+    # rcut=6.72488400000000
+    rcut = 20
+
+    per = np.stack((np.array([0, 0, 0]), np.diagonal(np.asarray(a0.get_cell()))), 1)
+    p = Prism(a0.get_cell())
+
+    xhi, yhi, zhi, xy, xz, yz = convert(p.get_lammps_prism(), "distance", "ASE", 'metal')
+    per = np.array([[0, xhi], [0, yhi], [0, zhi]])
+    atoms = gen_chem(atoms, types=2, comp=comp)
+
+    return atoms, per
 
 def gen_cell_USF(ao=None, xdim=None, ydim=None, zdim=None):
     #here we are generating the atom coordinates of an USF defect

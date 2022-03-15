@@ -5,23 +5,28 @@ import Potential as pot
 import rdf_coord as rc
 import rand_atoms_def as rad
 #%% Genarating rDF for FCC unit cell for the chosen systems
- 
+
+import time
+
+start = time.time()  # start time
+
 # ao=3.512
 ao=3.5225
 xdim=70
 ydim=70
 zdim=70
-rcut= 5.6
-# rcut=6.5
-#f
+# rcut= 20
+rcut=6.5
 
 
 comp=np.array([0.33,0.33,0.34])
 # comp=np.array([0.50,0.50])
 
 [atoms, per]=gc.gen_cell_FCC(ao,xdim,ydim,zdim)
-
+#%%
 [rdf_FCC,cn_FCC]=rc.rdf_coord(atoms[:,:3],rcut,np.array([0,0,0]))
+# print("this is rdf "+str(rdf_FCC))
+# print("this is cn "+str(cn_FCC))
 #%% Choosing the potential file name 
 fname='FeNiCr.eam.alloy'
 # fname='NiCo-lammps-2014.alloy'
@@ -321,3 +326,9 @@ for i in range(int(np.shape(std_pe_store_tf)[0])):
 sum_tf_std= np.sqrt(sum(np.asarray(std_pe_store_tf)**2+(pe_store_tf-np.average(pe_store_tf))**2)/np.shape(std_pe_store_tf)[0])
 std_tf=np.sqrt(sum_tf_std**2+form_E_fcc['E']['Std']**2-2*covar_tf)
 print(std_tf)
+
+for i in range(1000000):
+    pass
+
+end = time.time()
+print("Elapsed time is  {}".format(end - start))
