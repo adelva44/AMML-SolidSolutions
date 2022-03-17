@@ -67,7 +67,7 @@ def rdf_coord_bcc(a0,rc):
 def rdf_coord(atoms, rc, pos):
     import numpy as np
 # Based on a lattice filled with atoms from the gen_cell_MD.py script,
-    pos = np.ones((np.shape(atoms)[0], 3)) * pos                #Generate a position array filled with 1s that is the same size as the lattice
+    pos = np.ones((np.shape(atoms)[0], 3)) * pos                #Generate a position array filled with 1s that is the same size as how many atoms there are in the structure
     atoms = atoms - pos                                         #Finds distance between starting position and atom you are parsing through
     dists = np.zeros((np.shape(atoms)[0]))
 
@@ -85,7 +85,7 @@ def rdf_coord(atoms, rc, pos):
     rdf = np.zeros((np.shape(cn)[0], 2))                        #Generates rdf array based on the size of the CN array and fills the entries with zeros
 
     for i in np.arange(0, np.shape(uni)[0]):                    #For all unique neighbors, append the distances in the first column
-        ind = neigh == uni[i]                                   #if the neighbor value and ind value match, then append that value to the uni array
+        ind = neigh == uni[i]                                   #if the neighbor value and unique value match, then append that value to ind
         cn[i, 0] = uni[i]                                       #set the first column of cn entries as the distance values
         cn[i, 1] = sum(ind)                                     #set the second column of cn entries to how many neighbors there are
 

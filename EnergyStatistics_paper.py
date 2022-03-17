@@ -1,53 +1,54 @@
 # -*- coding: utf-8 -*-
-import numpy as np
-import gen_cell_MD as gc
-import Potential as pot
-import rdf_coord as rc
-import rand_atoms_def as rad
-#%% Genarating rDF for FCC unit cell for the chosen systems
+#Here, necessary Python packages will be imported and other written scripts will be called to perform the energy statistics calculations herein
+import numpy as np                                                       #Python package used commonly for data manipulation involving arrays, matrices, etc
+import gen_cell_MD as gc                                                 #Generated HCP, BCC, or FCC lattice based on inputted dimensions and lattice parameter
+import Potential as pot                                                  #Performs potential energy calculations for both Faulted and nonFaulted states
+import rdf_coord as rc                                                   #Generated Coordination Number (CN) and Radial Distribution Function (RDF) relations based on lattice parameter and cutoff distance
+import rand_atoms_def as rad                                             #
 
-import time
+import time                                                              #Time function to determine how quickly this script will run, used to check efficiency in edits --will remove once codes are fully completed
 
 start = time.time()  # start time
 
+#Generates RDF for desired unit cell for chosen systems
 # ao=3.512
-ao=3.5225
+ao=3.5225                                                               #Inputted lattice parameter value in Angstroms  (if user chooses no value, what should be the assumed value?)
+#Input Dimensions for crystal generation
 xdim=70
 ydim=70
 zdim=70
-# rcut= 20
-rcut=6.5
 
+rcut=6.5                                                                #Cutoff distance which will restrict coordination shells generated
 
 comp=np.array([0.33,0.33,0.34])
 # comp=np.array([0.50,0.50])
 
-[atoms, per]=gc.gen_cell_FCC(ao,xdim,ydim,zdim)
+[atoms, per]=gc.gen_cell_FCC(ao,xdim,ydim,zdim)                         #Generates list of
 #%%
 [rdf_FCC,cn_FCC]=rc.rdf_coord(atoms[:,:3],rcut,np.array([0,0,0]))
-# print("this is rdf "+str(rdf_FCC))
-# print("this is cn "+str(cn_FCC))
-#%% Choosing the potential file name 
+
+#Declaring a .alloy file name to generate Cohesive Energy statistics
 fname='FeNiCr.eam.alloy'
 # fname='NiCo-lammps-2014.alloy'
 
-#%%Reading the potential datasets
+#Reading the potential datasets declared above
 
 [rrange,rhorange,rho,Fr,Pp]=pot.potential_read(fname)
-#%% Calculate the lammps results analytically
-#[Anal_df_fcc,energies_fcc]=an.Analytical_Energy(atoms,Neighbors_fcc,fname)
+#%% Calculate the lammps results analytically           !!Remove?
+#[Anal_df_fcc,energies_fcc]=an.Analytical_Energy(atoms,Neighbors_fcc,fname)     !!Remove?
 
-#%% Calculates the cohesive energy for chosen fcc systems in
+#Performs Cohesive Energy Calculations and Statistics based on chosen system
 [form_E_fcc,test_fcc,covars]=pot.potential_stats2(rrange,rhorange,rho,Fr,Pp,comp,cn_FCC)
 print(form_E_fcc['E']['Std'])
-#%%
-# [Lammps_df,Lammps_atoms]=Lammps_stats(fname='atoms.0.lammps')
-#%%USF
-[atoms, per]=gc.gen_cell_USF(ao,xdim,ydim,zdim) 
-#%%
-#atoms=copy.deepcopy(atoms_usf[:,0:3])
-pos=rad.rand_atoms_def(atoms,ao,rcut)
 
+# [Lammps_df,Lammps_atoms]=Lammps_stats(fname='atoms.0.lammps')             !!Remove?
+
+#Faulted System Calculations Hereon...
+#%%USF
+[atoms, per]=gc.gen_cell_USF(ao,xdim,ydim,zdim)                        #Generates Fault structure
+#%%
+#atoms=copy.deepcopy(atoms_usf[:,0:3])          !!Remove?
+pos=rad.rand_atoms_def(atoms,ao,rcut)
 
 layer_USF=[]
 layer_USF1=[]

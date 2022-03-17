@@ -1,48 +1,47 @@
-# -*- coding: utf-8  -*-
-import numpy as np
-import gen_cell_MD as gc
-import Potential as pot
-import rdf_coord_tester as rc
-import rand_atoms_def as rad
 
-import time
+#Here, necessary Python packages will be imported and other written scripts will be called to perform the energy statistics calculations herein
+import numpy as np                                                       #Python package used commonly for data manipulation involving arrays, matrices, etc
+import gen_cell_MD as gc                                                 #Generated HCP, BCC, or FCC lattice based on inputted dimensions and lattice parameter
+import Potential as pot                                                  #Performs potential energy calculations
+import rdf_coord_tester as rc                                            #Generated coordination number (CN) and radial distribution function (RDF) relations based on lattice parameter and cutoff distance
+import rand_atoms_def as rad                                             #Chooses a random atom within a layer in a generated system away from free surface, used on Faulted calculations
 
-start = time.time()  # start time
+import time                                                              #Time function to determine how quickly this script will run, used to check efficiency in edits --will remove once codes are fully completed
 
-
-
-# %% Genarating rDF for FCC unit cell for the chosen systems
+start = time.time()                                                      # starts timer
 
 # ao=3.512
-ao = 3.5225
+ao = 3.5225                                                             #Inputted lattice parameter value in Angstroms  (!!if user chooses no value, what should be the assumed value?)
+#Input Dimensions for crystal generation
 xdim = 70
 ydim = 70
 zdim = 70
-# rcut= 20
-rcut = 6.5
 
-comp = np.array([0.33, 0.33, 0.34])
+rcut = 6.5                                                              #Cutoff distance which will restrict coordination shells generated
+
+comp = np.array([0.33, 0.33, 0.34])                                     #Refers to the composition of the system
 # comp=np.array([0.50,0.50])
 
-[atoms, per] = gc.gen_cell_FCC(ao, xdim, ydim, zdim)
-# %%
-[rdf_FCC, cn_FCC] = rc.rdf_coord_fcc(ao,rcut)
+[atoms, per] = gc.gen_cell_FCC(ao, xdim, ydim, zdim)                    #Generates the nonFaulted structure based on desired input dimensions and lattice parameter, per refers to the periodic boundary conditions of the perfect lattice and atoms refers to the generated atom in the lattice
 
-# %% Choosing the potential file name
+[rdf_FCC, cn_FCC] = rc.rdf_coord_fcc(ao,rcut)                           #Generates RDF and CN for perfect lattice based on ao and rc values, user can change fcc part to hcp or bcc based on desired crystal lattice
+
+#Declaring a .alloy file name to generate cohesive energy statistics as a string (between quotations '')
 fname = 'FeNiCr.eam.alloy'
 # fname='NiCo-lammps-2014.alloy'
 
-# %%Reading the potential datasets
-
+#Reading the EAM potential dataset declared above and extracting needed parameters from file
 [rrange, rhorange, rho, Fr, Pp] = pot.potential_read(fname)
-# %% Calculate the lammps results analytically
-# [Anal_df_fcc,energies_fcc]=an.Analytical_Energy(atoms,Neighbors_fcc,fname)
+#%% Calculate the lammps results analytically                                   !!Remove?
+#[Anal_df_fcc,energies_fcc]=an.Analytical_Energy(atoms,Neighbors_fcc,fname)     !!Remove?
 
-# %% Calculates the cohesive energy for chosen fcc systems in
+#Performs Cohesive Energy Calculations and Statistics based on chosen system
 [form_E_fcc, test_fcc, covars] = pot.potential_stats2(rrange, rhorange, rho, Fr, Pp, comp, cn_FCC)
 print(form_E_fcc['E']['Std'])
 # %%
-# [Lammps_df,Lammps_atoms]=Lammps_stats(fname='atoms.0.lammps')
+# [Lammps_df,Lammps_atoms]=Lammps_stats(fname='atoms.0.lammps')                 !!Remove?
+
+#Faulted Systems Calculations Hereon...
 # %%USF
 [atoms, per] = gc.gen_cell_USF(ao, xdim, ydim, zdim)
 # %%

@@ -6,9 +6,9 @@ Created on Mon Aug  9 19:10:09 2021
 @author: Matt
 """
 
-# Using LAAMPS, this function extracts the Interatomic Potential information from Embedded-Atom Method style file and sets that information to corresponding variables
-def potential_read(fname='NiCo-lammps-2014.alloy'):
-#%%
+#This function extracts the Interatomic Potential information from Embedded-Atom Method style file and sets that information to corresponding variables. More information about EAM style and variable names can be read here: https://docs.lammps.org/pair_eam.html
+def potential_read(fname='FeNiCr.eam.alloy'):
+
     import numpy as np
     #fname='NiCo-lammps-2014.alloy'
     #fname='FeNiCr.eam.alloy'
@@ -88,6 +88,7 @@ def potential_read(fname='NiCo-lammps-2014.alloy'):
 #%%    
     return rrange,rhorange,rho,Fr,Pp
 
+#Performs Potential Energy calculations based on the parameters extracted from the EAM-style file above
 def potential_stats2(rrange,rhorange,rho,Fr,Pp,comp,cn):
 #%%
     import numpy as np
