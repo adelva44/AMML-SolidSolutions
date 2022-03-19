@@ -35,7 +35,7 @@ fname = 'FeNiCr.eam.alloy'
 #%% Calculate the lammps results analytically                                   !!Remove?
 #[Anal_df_fcc,energies_fcc]=an.Analytical_Energy(atoms,Neighbors_fcc,fname)     !!Remove?
 
-#Performs Cohesive Energy Calculations and Statistics based on chosen system
+#Performs Cohesive Energy Calculations and Statistics based on chosen EAM file of chosen system
 [form_E_fcc, test_fcc, covars] = pot.potential_stats2(rrange, rhorange, rho, Fr, Pp, comp, cn_FCC)
 print(form_E_fcc['E']['Std'])
 # %%

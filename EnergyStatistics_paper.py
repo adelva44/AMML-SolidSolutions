@@ -26,7 +26,7 @@ comp=np.array([0.33,0.33,0.34])
 [atoms, per]=gc.gen_cell_FCC(ao,xdim,ydim,zdim)                         #Generates list of
 #%%
 [rdf_FCC,cn_FCC]=rc.rdf_coord(atoms[:,:3],rcut,np.array([0,0,0]))
-
+print(cn_FCC)
 #Declaring a .alloy file name to generate Cohesive Energy statistics
 fname='FeNiCr.eam.alloy'
 # fname='NiCo-lammps-2014.alloy'
@@ -39,6 +39,8 @@ fname='FeNiCr.eam.alloy'
 
 #Performs Cohesive Energy Calculations and Statistics based on chosen system
 [form_E_fcc,test_fcc,covars]=pot.potential_stats2(rrange,rhorange,rho,Fr,Pp,comp,cn_FCC)
+print(form_E_fcc)
+print(covars)
 print(form_E_fcc['E']['Std'])
 
 # [Lammps_df,Lammps_atoms]=Lammps_stats(fname='atoms.0.lammps')             !!Remove?
