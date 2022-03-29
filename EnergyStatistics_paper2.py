@@ -2,7 +2,7 @@
 #Here, necessary Python packages will be imported and other written scripts will be called to perform the energy statistics calculations herein
 import numpy as np                                                       #Python package used commonly for data manipulation involving arrays, matrices, etc
 import gen_cell_MD as gc                                                 #Generated HCP, BCC, or FCC lattice based on inputted dimensions and lattice parameter
-import Potential as pot                                                  #Performs potential energy calculations
+import Potential2 as pot                                                  #Performs potential energy calculations
 import rdf_coord_tester as rc                                            #Generated coordination number (CN) and radial distribution function (RDF) relations based on lattice parameter and cutoff distance
 import rand_atoms_def as rad                                             #Chooses a random atom within a layer in a generated system away from free surface, used on Faulted calculations
 
@@ -37,6 +37,8 @@ fname = 'FeNiCr.eam.alloy'
 
 #Performs Cohesive Energy Calculations and Statistics based on chosen EAM file of chosen system
 [form_E_fcc, test_fcc, covars] = pot.potential_stats2(rrange, rhorange, rho, Fr, Pp, comp, cn_FCC)
+print(form_E_fcc)
+print(covars)
 print(form_E_fcc['E']['Std'])
 # %%
 # [Lammps_df,Lammps_atoms]=Lammps_stats(fname='atoms.0.lammps')                 !!Remove?
