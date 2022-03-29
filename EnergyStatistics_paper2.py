@@ -15,18 +15,22 @@ start = time.time()  # start time
 
 # ao=3.512
 ao = 3.5225
-xdim = 70
-ydim = 70
-zdim = 70
+# xdim = 70
+# ydim = 70
+# zdim = 70
+xdim=20
+ydim=20
+zdim=20
 # rcut= 20
-rcut = 6.5
+# rcut = 6.5
+rcut = 5.6
 
 comp = np.array([0.33, 0.33, 0.34])
 # comp=np.array([0.50,0.50])
 
-[atoms, per] = gc.gen_cell_FCC(ao, xdim, ydim, zdim)
+[atoms, per] = gc.gen_cell_BCC(ao, xdim, ydim, zdim)
 # %%
-[rdf_FCC, cn_FCC] = rc.rdf_coord_fcc(ao,rcut)
+[rdf_FCC, cn_FCC] = rc.rdf_coord_bcc(ao,rcut)
 
 # %% Choosing the potential file name
 fname = 'FeNiCr.eam.alloy'

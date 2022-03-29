@@ -210,7 +210,7 @@ def gen_cell_BCC(ao=None, xdim=None, ydim=None, zdim=None):
     return atoms, per
 
 def gen_cell_USF(ao=None, xdim=None, ydim=None, zdim=None):
-    #here we are generating the atom coordinates of an USF defect
+    #Here we are generating the atom coordinates of an USF defect
     #We ensure that the atom at the origin is placed along the defect.
     #This makes our lives easier when calculating the RDF
     
@@ -223,7 +223,7 @@ def gen_cell_USF(ao=None, xdim=None, ydim=None, zdim=None):
     return atoms, per
 
 def gen_cell_ISF(ao=None, xdim=None, ydim=None, zdim=None):
-    #here we are generating the atom coordinates of an ISF defect
+    #Here we are generating the atom coordinates of an ISF defect
     #We ensure that the atom at the origin is placed along the defect.
     #This makes our lives easier when calculating the RDF
     
