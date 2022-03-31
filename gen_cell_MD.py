@@ -184,7 +184,7 @@ def gen_cell_HCP(ao=None, xdim=None, ydim=None, zdim=None):
     
     return atoms, per
 
-def gen_cell_BCC(ao=None, xdim=None, ydim=None, zdim=None):
+def gen_cell_BCC(ao=None, xdim=None, ydim=None, zdim=None):                 #Working on this still, unsure how to check to ensure this is being generated correctly
     from ase.build import bulk
     from ase.calculators.lammps import Prism, convert
 
