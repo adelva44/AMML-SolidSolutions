@@ -153,7 +153,7 @@ def potential_stats2(rrange,rhorange,rho,Fr,Pp,comp,cn):
 
     for k in np.arange(0,np.shape(cn)[0]):
         for j in np.arange(0,np.shape(comp)[0]):
-            avg=np.sum(Pp_cn[k,j,:]*comp)                                                                       #Located in Page 26 in Manuscript (Average Interaction Energy for a Solute X in Coordination Shell eta)
+            avg=np.sum(Pp_cn[k,j,:]*comp)                                                                       #V_bar_eta_x Located in Page 26 in Manuscript (Average Interaction Energy for a Solute X in Coordination Shell eta)
             Pp_std_avg[k,j]= avg*cn[k,1]                                                                        #V_bar_eta_x * N_eta
             Pp_std_cn[k,j]= np.sum((Pp_cn[k,j,:]-avg)*(Pp_cn[k,j,:]-avg)*comp)*cn[k,1]
 
@@ -163,35 +163,21 @@ def potential_stats2(rrange,rhorange,rho,Fr,Pp,comp,cn):
 
     Pp_std_cn2 = np.sqrt(np.sum(Pp_std_cn,axis=0))                  #Equation A1 in Manuscript (Solute-level Interaction Energy Standard Deviation)
     Pp_std_avg2 = np.sum(Pp_std_avg,axis=0)                         #V_bar_x, Equation A2 in the Manuscript (Solute-level Interaction Energy Average)
-    # Pp_std_avg4 = np.sum(Pp_std_avg3,axis=0)                         #V_bar_x, Equation A2 in the Manuscript (Solute-level Interaction Energy Average)
-
-    print(Pp_std_avg2)
-    # print(Pp_std_avg4)
-
-    Pp_std = np.sqrt(np.sum(comp * (np.square(Pp_std_cn2) + np.square((Pp_std_avg2 - sum(sum(Pp_bar)))))))      #A3, replace with E4
-    # Pp_std2 = np.sqrt(np.sum(comp*(np.square(Pp_std_cn2))+ comp*np.square(Pp_std_avg2 - Pp_std_avg4)))
-
-    print("this is expected "+str(Pp_std))
-    # print("this is calculated "+str(Pp_std2))
-
-    aa=np.matmul(np.array([comp]).T,np.array([comp]))
-    bb=np.zeros((np.shape(comp)[0],np.shape(comp)[0]))
-    # Pp_std2 = np.zeros((np.shape(comp)[0],np.shape(comp)[0]))
-    # for i in np.arange(0,np.shape(bb)[0]):
-    #     for j in np.arange(0,np.shape(bb)[1]):
-    #         bb = Pp_std_avg2[i] - Pp_std_avg2[j]
-            # Pp_std2 = Pp_std2 + comp[i]*comp[j]*np.square(bb)
-            # print(comp[i],comp[j])
-            # bb[i,j]=Pp_std_avg2[i]-Pp_std_avg2[j]
-    # print(bb)
-    # Pp_std2 = np.sqrt(np.sum(comp*np.square(Pp_std_cn2))+ np.sum(comp*comp*np.square(bb)))
-    # print(bb)
-    # Pp_std = np.sqrt(np.sum(comp * (np.square(Pp_std_cn2) + np.square((Pp_std_avg2 - sum(sum(Pp_bar)))))))
-    # print(Pp_std2)
 
 
-    cc=np.square(bb)
-    # print(cc)
+    bb = np.zeros((np.shape(comp)[0], np.shape(comp)[0]))
+    for i in np.arange(0, np.shape(bb)[0]):
+        for j in np.arange(0, np.shape(bb)[0]):
+            if i <= j:
+                continue
+            bb[i,j]= comp[i]*comp[j]*np.square(Pp_std_avg2[i] - Pp_std_avg2[j])
+
+    Pp_std = np.sqrt(np.sum(comp*(np.square(Pp_std_cn2)))+sum(sum(bb)))                                     #Equation 4, Standard deviation of the Pair Interaction energy
+    # print('this is E4',Pp_std)
+    A3 = np.sqrt(np.sum(comp * (np.square(Pp_std_cn2) + np.square((Pp_std_avg2 - sum(sum(Pp_bar)))))))      #A3, replace with E4
+    # print('this is A3',A3)
+
+    print('E4-A3',Pp_std-A3)
 
     form_E[1,2]=Pp_std*0.5                                                  #1/2 Standard Deviation of Pair Interaction Energy (1/2 is to avoid double counting of interaction energies)
 

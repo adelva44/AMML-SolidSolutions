@@ -10,8 +10,8 @@ import time                                                              #Time f
 
 start = time.time()                                                      # starts timer
 
-# ao=3.512
-ao = 3.5225                                                             #Inputted lattice parameter value in Angstroms  (!!if user chooses no value, what should be the assumed value?)
+ao=3.512
+# ao = 3.5225                                                            #Inputted lattice parameter value in Angstroms  (!!if user chooses no value, what should be the assumed value?)
 #Input Dimensions for crystal generation
 xdim = 70
 ydim = 70
@@ -19,16 +19,19 @@ zdim = 70
 
 rcut = 6.5                                                              #Cutoff distance which will restrict coordination shells generated
 
-comp = np.array([0.33, 0.33, 0.34])                                     #Refers to the composition of the system
-# comp=np.array([0.50,0.50])
+# comp = np.array([0.33, 0.33, 0.34])                                     #Refers to the composition of the system
+comp=np.array([0.1,0.9])
+# comp = np.array([0.25,0.25,0.5])
 
 [atoms, per] = gc.gen_cell_FCC(ao, xdim, ydim, zdim)                    #Generates the nonFaulted structure based on desired input dimensions and lattice parameter, per refers to the periodic boundary conditions of the perfect lattice and atoms refers to the generated atom in the lattice
+# [atoms, per] = gc.gen_cell_HCP(ao, xdim, ydim, zdim)                    #Generates the nonFaulted structure based on desired input dimensions and lattice parameter, per refers to the periodic boundary conditions of the perfect lattice and atoms refers to the generated atom in the lattice
 
 [rdf_FCC, cn_FCC] = rc.rdf_coord_fcc(ao,rcut)                           #Generates RDF and CN for perfect lattice based on ao and rc values, user can change fcc part to hcp or bcc based on desired crystal lattice
+# [rdf_FCC, cn_FCC] = rc.rdf_coord_hcp(ao,rcut)                           #Generates RDF and CN for perfect lattice based on ao and rc values, user can change fcc part to hcp or bcc based on desired crystal lattice
 
 #Declaring a .alloy file name to generate cohesive energy statistics as a string (between quotations '')
-fname = 'FeNiCr.eam.alloy'
-# fname='NiCo-lammps-2014.alloy'
+# fname = 'FeNiCr.eam.alloy'
+fname='NiCo-lammps-2014.alloy'
 
 #Reading the EAM potential dataset declared above and extracting needed parameters from file
 [rrange, rhorange, rho, Fr, Pp] = pot.potential_read(fname)
@@ -39,7 +42,9 @@ fname = 'FeNiCr.eam.alloy'
 [form_E_fcc, test_fcc, covars] = pot.potential_stats2(rrange, rhorange, rho, Fr, Pp, comp, cn_FCC)
 print(form_E_fcc)
 # print(covars)
+# print(form_E_fcc['E']['Mean'])
 # print(form_E_fcc['E']['Std'])
+
 # %%
 # [Lammps_df,Lammps_atoms]=Lammps_stats(fname='atoms.0.lammps')                 !!Remove?
 
@@ -352,4 +357,4 @@ for i in range(1000000):
     pass
 
 end = time.time()
-print("Elapsed time is  {}".format(end - start))
+# print("Elapsed time is  {}".format(end - start))

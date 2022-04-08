@@ -11,8 +11,8 @@ import time                                                              #Time f
 start = time.time()  # start time
 
 #Generates RDF for desired unit cell for chosen systems
-# ao=3.512
-ao=3.5225                                                               #Inputted lattice parameter value in Angstroms  (if user chooses no value, what should be the assumed value?)
+ao=3.512
+# ao=3.5225                                                               #Inputted lattice parameter value in Angstroms  (if user chooses no value, what should be the assumed value?)
 #Input Dimensions for crystal generation
 xdim=70
 ydim=70
@@ -20,16 +20,17 @@ zdim=70
 
 rcut=6.5                                                                #Cutoff distance which will restrict coordination shells generated
 
-comp=np.array([0.33,0.33,0.34])
-# comp=np.array([0.50,0.50])
+# comp=np.array([0,0,1])
+comp=np.array([0.1,0.9])
 
 [atoms, per]=gc.gen_cell_FCC(ao,xdim,ydim,zdim)                         #Generates list of
+# [atoms, per]=gc.gen_cell_HCP(ao,xdim,ydim,zdim)
 #%%
 [rdf_FCC,cn_FCC]=rc.rdf_coord(atoms[:,:3],rcut,np.array([0,0,0]))
 print(cn_FCC)
 #Declaring a .alloy file name to generate Cohesive Energy statistics
-fname='FeNiCr.eam.alloy'
-# fname='NiCo-lammps-2014.alloy'
+# fname='FeNiCr.eam.alloy'
+fname='NiCo-lammps-2014.alloy'
 
 #Reading the potential datasets declared above
 
@@ -41,6 +42,7 @@ fname='FeNiCr.eam.alloy'
 [form_E_fcc,test_fcc,covars]=pot.potential_stats2(rrange,rhorange,rho,Fr,Pp,comp,cn_FCC)
 print(form_E_fcc)
 print(covars)
+print(form_E_fcc['E']['Mean'])
 print(form_E_fcc['E']['Std'])
 
 # [Lammps_df,Lammps_atoms]=Lammps_stats(fname='atoms.0.lammps')             !!Remove?
